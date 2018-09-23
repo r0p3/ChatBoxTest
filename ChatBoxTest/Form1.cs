@@ -13,9 +13,46 @@ namespace ChatBoxTest
 {
     public partial class Form1 : Form
     {
+        public Color usernameC = Color.Gray, messageC = Color.Black, backgroundC = Color.LightBlue, chatBackgroundC = Color.White;
         public Form1()
         {
             InitializeComponent();
+            pBackground.Click += color_Click;
+            pUsername.Click += color_Click;
+            pMessage.Click += color_Click;
+            pBackground.BackColor = backgroundC;
+            pUsername.BackColor = usernameC;
+            pMessage.BackColor = messageC;
+            pChatBox.Click += color_Click;
+
+        }
+
+        private void color_Click(object sender, EventArgs e)
+        {
+            Panel p = (Panel)sender;
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Color newColor = colorDialog1.Color;
+                switch (p.Name)
+                {
+                    case "pUsername":
+                        usernameC = newColor;
+                        break;
+                    case "pMessage":
+                        messageC = newColor;
+                        break;
+                    case "pBackground":
+                        backgroundC = newColor;
+                        break;
+                    case "pChatBox":
+                        chatBackgroundC = newColor;
+                        richTextBox1.BackColor = newColor;
+                        break;
+                    default:
+                        break;
+                }
+                p.BackColor = newColor;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -29,6 +66,10 @@ namespace ChatBoxTest
             addToChat(false, "Me", "Hello my friend...........................");
         }
 
+        private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.SuppressKeyPress = true;
+        }
 
         public void addToChat(bool me, string username, string message)
         {
@@ -57,7 +98,7 @@ namespace ChatBoxTest
             if(firstMessage)
             {
                 richTextBox1.Select(startIndex, username.Length);
-                richTextBox1.SelectionColor = Color.Gray;
+                richTextBox1.SelectionColor = usernameC;
                 richTextBox1.SelectionFont = new Font("Arial", 8, FontStyle.Italic);
                 richTextBox1.Select(startIndex + username.Length + 1, message.Length);
             }
@@ -66,8 +107,9 @@ namespace ChatBoxTest
                 richTextBox1.Select(startIndex, message.Length);
             }
             richTextBox1.SelectionFont = new Font("Arial", 11, FontStyle.Regular);
-            richTextBox1.SelectionBackColor = Color.LightBlue;
-            richTextBox1.SelectionColor = Color.Black;
+            richTextBox1.SelectionBackColor = backgroundC;
+            richTextBox1.SelectionColor = messageC;
+
         }
 
         private void button3_Click(object sender, EventArgs e)
